@@ -2,7 +2,7 @@ Package: fmriAR
 Type: Package
 Title: Fast AR and ARMA Noise Whitening for Functional MRI (fMRI)
         Design and Data
-Version: 0.2.0
+Version: 0.3.1
 Authors@R: person("Bradley", "Buchsbaum", email = "brad.buchsbaum@gmail.com", role = c("aut","cre"))
 Author: Bradley Buchsbaum [aut, cre]
 Maintainer: Bradley Buchsbaum <brad.buchsbaum@gmail.com>
@@ -15,7 +15,7 @@ Description: Lightweight utilities to estimate autoregressive (AR) and
     <doi:10.1016/j.neuroimage.2011.08.056>.
 License: MIT + file LICENSE
 Encoding: UTF-8
-RoxygenNote: 7.3.2.9000
+RoxygenNote: 7.3.3
 Depends: R (>= 4.0)
 Imports: Rcpp, stats
 Suggests: testthat (>= 3.0.0), knitr, rmarkdown, abind, withr
@@ -25,6 +25,6 @@ Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://bbuchsbaum.github.io/fmriAR/
 NeedsCompilation: yes
-Packaged: 2025-10-29 13:23:04 UTC; bbuchsbaum
+Packaged: 2026-01-25 22:03:03 UTC; bbuchsbaum
 Repository: CRAN
-Date/Publication: 2025-11-03 10:10:02 UTC
+Date/Publication: 2026-01-25 22:30:02 UTC

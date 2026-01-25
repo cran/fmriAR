@@ -134,6 +134,11 @@ plan_parcel$order
 whitened_parcel <- whiten_apply(plan_parcel, X, Y, runs = runs, parcels = parcels_fine)
 length(whitened_parcel$X_by)
 
+## ----whiten-parcel-check------------------------------------------------------
+# Confirm whitened design per parcel matches X dimensions
+dim(whitened_parcel$X_by[[1]])
+dim(X)
+
 ## ----arma---------------------------------------------------------------------
 plan_arma <- fit_noise(
   resid,
@@ -148,7 +153,25 @@ plan_arma$order
 
 ## ----arma-whiten--------------------------------------------------------------
 whitened_arma <- whiten_apply(plan_arma, X, Y, runs = runs)
-whitened_arma$X[1:5, ]
+# The task regressor is 0 for the first 30 TRs in this simulation,
+# so showing the first 5 rows hides the effect on that column.
+# Instead, inspect rows around the first task onset (t = 31)
+# to see how the step regressor is filtered.
+whitened_arma$X[28:36, ]
+
+## ----arma-design-plot, fig.cap = "Task regressor around onset: raw vs whitened (ARMA)"----
+# Visualize how whitening transforms the task step regressor around its first onset
+task_raw <- X[, "task"]
+task_white <- whitened_arma$X[, "task"]
+onset <- which(task_raw > 0)[1]
+win <- max(1, onset - 10):min(n_time, onset + 30)
+ylim <- range(c(task_raw[win], task_white[win]))
+plot(win, task_raw[win], type = "s", lwd = 2, col = "#1b9e77",
+     ylim = ylim, xlab = "Time (TR)", ylab = "Regressor value",
+     main = "Task regressor: raw vs whitened (ARMA)")
+lines(win, task_white[win], lwd = 2, col = "#d95f02")
+legend("topleft", legend = c("Raw task", "Whitened task"),
+       col = c("#1b9e77", "#d95f02"), lwd = 2, bty = "n")
 
 ## ----afni-plan, eval = FALSE--------------------------------------------------
 # # Example: AFNI-style AR(3) with optional MA(1) term
@@ -169,8 +192,8 @@ whitened_arma$X[1:5, ]
 # whitened_afni <- whiten_apply(plan_afni, X, Y, runs = runs)
 
 ## ----diagnostics--------------------------------------------------------------
-# Autocorrelation diagnostics for whitened residuals
-acorr <- acorr_diagnostics(Yw[, 1:3])
+# Autocorrelation diagnostics for whitened residuals (innovations)
+acorr <- acorr_diagnostics(innov_var[, 1:3])
 acorr
 
 # Sandwich standard errors from whitened residuals
